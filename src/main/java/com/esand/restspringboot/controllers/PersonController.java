@@ -3,7 +3,7 @@ package com.esand.restspringboot.controllers;
 import com.esand.restspringboot.mapper.PersonMapper;
 import com.esand.restspringboot.model.Person;
 import com.esand.restspringboot.services.PersonService;
-import dto.PersonDto;
+import com.esand.restspringboot.dto.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 public class PersonController {
 
     @Autowired

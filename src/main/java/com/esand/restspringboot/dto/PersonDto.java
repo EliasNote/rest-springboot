@@ -1,6 +1,5 @@
-package dto;
+package com.esand.restspringboot.dto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class PersonDto implements Serializable {
     private String firstName;
     private String lastName;
