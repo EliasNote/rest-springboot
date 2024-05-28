@@ -1,9 +1,9 @@
 package com.esand.restspringboot.controllers;
 
+import com.esand.restspringboot.dto.BookDto;
 import com.esand.restspringboot.mapper.Mapper;
-import com.esand.restspringboot.model.Person;
-import com.esand.restspringboot.services.PersonService;
-import com.esand.restspringboot.dto.PersonDto;
+import com.esand.restspringboot.model.Book;
+import com.esand.restspringboot.services.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,38 +21,37 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api/person/v1")
-@Tag(name = "People", description = "Endpoints for Managing People")
-public class PersonController {
+@RequestMapping("/api/book/v1")
+@Tag(name = "Book", description = "Endpoints for Managing Book")
+public class BookController {
 
     @Autowired
-    private PersonService personService;
+    private BookService bookService;
 
-    @Operation(summary = "Adds a new Person",
-            description = "Adds a new Person by passing in a JSON, XML or YML representation of the person!",
-            tags = {"People"},
+    @Operation(summary = "Adds a new Book",
+            description = "Adds a new Book by passing in a JSON, XML or YML representation of the book!",
+            tags = {"Book"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = PersonDto.class))
+                            content = @Content(schema = @Schema(implementation = BookDto.class))
                     ),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             }
     )
-    @CrossOrigin(origins = {"http://localhost:8080", "https://erudio.com.br"})
     @PostMapping
-    public ResponseEntity<PersonDto> create(@RequestBody PersonDto dto) {
-        Person person = personService.save(Mapper.parseObject(dto, Person.class));
-        PersonDto response = Mapper.parseObject(person, PersonDto.class).add(linkTo(methodOn(PersonController.class).create(dto)).withSelfRel());
+    public ResponseEntity<BookDto> create(@RequestBody BookDto dto) {
+        Book book = bookService.save(Mapper.parseObject(dto, Book.class));
+        BookDto response = Mapper.parseObject(book, BookDto.class).add(linkTo(methodOn(BookController.class).create(dto)).withSelfRel());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @Operation(summary = "Finds a Person", description = "Finds a Person",
-            tags = {"People"},
+    @Operation(summary = "Finds a Book", description = "Finds a Book",
+            tags = {"Book"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = PersonDto.class))
+                            content = @Content(schema = @Schema(implementation = BookDto.class))
                     ),
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -61,22 +60,21 @@ public class PersonController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             }
     )
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/{id}")
-    public ResponseEntity<PersonDto> findById(@PathVariable Long id) {
-        PersonDto response = Mapper.parseObject(personService.findById(id), PersonDto.class);
-        response.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+    public ResponseEntity<BookDto> findById(@PathVariable Long id) {
+        BookDto response = Mapper.parseObject(bookService.findById(id), BookDto.class);
+        response.add(linkTo(methodOn(BookController.class).findById(id)).withSelfRel());
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Finds all People", description = "Finds all People",
-            tags = {"People"},
+    @Operation(summary = "Finds all Book", description = "Finds all Book",
+            tags = {"Book"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = {
                                     @Content(
                                             mediaType = "application/json",
-                                            array = @ArraySchema(schema = @Schema(implementation = PersonDto.class))
+                                            array = @ArraySchema(schema = @Schema(implementation = BookDto.class))
                                     )
                             }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -86,15 +84,15 @@ public class PersonController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<PersonDto>> findAll() {
-        List<PersonDto> response = Mapper.parseListObject(personService.findAll(), PersonDto.class);
-        response.stream().forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getId())).withSelfRel()));
+    public ResponseEntity<List<BookDto>> findAll() {
+        List<BookDto> response = Mapper.parseListObject(bookService.findAll(), BookDto.class);
+        response.stream().forEach(p -> p.add(linkTo(methodOn(BookController.class).findById(p.getId())).withSelfRel()));
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Deletes a Person",
-            description = "Deletes a Person by passing in a JSON, XML or YML representation of the person!",
-            tags = {"People"},
+    @Operation(summary = "Deletes a Book",
+            description = "Deletes a Book by passing in a JSON, XML or YML representation of the book!",
+            tags = {"Book"},
             responses = {
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -105,16 +103,16 @@ public class PersonController {
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        personService.delete(id);
+        bookService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Updates a Person",
-            description = "Updates a Person by passing in a JSON, XML or YML representation of the person!",
-            tags = {"People"},
+    @Operation(summary = "Updates a Book",
+            description = "Updates a Book by passing in a JSON, XML or YML representation of the book!",
+            tags = {"Book"},
             responses = {
                     @ApiResponse(description = "Updated", responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = PersonDto.class))
+                            content = @Content(schema = @Schema(implementation = BookDto.class))
                     ),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
@@ -123,9 +121,9 @@ public class PersonController {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<PersonDto> update(@PathVariable Long id, @RequestBody PersonDto dto) {
-        Person person = personService.update(id, Mapper.parseObject(dto, Person.class));
-        PersonDto response = Mapper.parseObject(person, PersonDto.class).add(linkTo(methodOn(PersonController.class).update(id, dto)).withSelfRel());
+    public ResponseEntity<BookDto> update(@PathVariable Long id, @RequestBody BookDto dto) {
+        Book book = bookService.update(id, Mapper.parseObject(dto, Book.class));
+        BookDto response = Mapper.parseObject(book, BookDto.class).add(linkTo(methodOn(BookController.class).update(id, dto)).withSelfRel());
         return ResponseEntity.ok(response);
     }
 }

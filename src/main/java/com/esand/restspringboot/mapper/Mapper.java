@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
-public class PersonMapper {
+public class Mapper {
     public static <O, D> D parseObject(O origin, Class<D> destination) {
         return new ModelMapper().map(origin, destination);
     }

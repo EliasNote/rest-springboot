@@ -34,7 +34,9 @@ public class PersonService {
     }
 
     public Person update(Long id, Person person) {
-        person.setId(id);
-        return personRepository.save(person);
+        Person result = findById(id);
+        result = person;
+        result.setId(id);
+        return personRepository.save(result);
     }
 }
