@@ -28,6 +28,7 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
+
     @Operation(summary = "Adds a new Person",
             description = "Adds a new Person by passing in a JSON, XML or YML representation of the person!",
             tags = {"People"},
