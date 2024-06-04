@@ -1,5 +1,9 @@
 package com.esand.restspringboot.exceptions;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +13,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.Date;
 
+@Getter
+@Setter
+@AllArgsConstructor
 @RestControllerAdvice
 public class ApiExceptionHandler {
 

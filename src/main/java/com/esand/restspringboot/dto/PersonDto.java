@@ -19,5 +19,6 @@ public class PersonDto extends RepresentationModel<PersonDto> implements Seriali
     private String lastName;
     private String address;
     private String gender;
+    private Boolean enabled;
 }
 

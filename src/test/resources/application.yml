@@ -1,5 +1,7 @@
 cors:
   originPatterns: http://localhost:3000,http://localhost:8080,https://erudio.com.br
+file:
+  upload-dir: /Users/elias/Desktop/Programação/Estágio/Atividades/POO/SpringBoot/rest-springboot/ArquivosUpload
 security:
   jwt:
     token:
@@ -16,6 +18,12 @@ spring:
       ddl-auto: none
     properties:
       show-sql: false
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
 springdoc:
   pathsToMatch:
     - /auth/**

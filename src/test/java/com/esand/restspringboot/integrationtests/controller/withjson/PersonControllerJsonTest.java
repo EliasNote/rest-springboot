@@ -179,6 +179,41 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
 	@Test
 	@Order(4)
+	public void testAlternEnabledById() throws JsonMappingException, JsonProcessingException {
+
+		var content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.pathParam("id", person.getId())
+				.when()
+				.patch("{id}")
+				.then()
+				.statusCode(200)
+				.extract()
+				.body()
+				.asString();
+
+		PersonDto persistedPerson = objectMapper.readValue(content, PersonDto.class);
+		person = persistedPerson;
+
+		Assertions.assertNotNull(persistedPerson);
+
+		Assertions.assertNotNull(persistedPerson.getId());
+		Assertions.assertNotNull(persistedPerson.getFirstName());
+		Assertions.assertNotNull(persistedPerson.getLastName());
+		Assertions.assertNotNull(persistedPerson.getAddress());
+		Assertions.assertNotNull(persistedPerson.getGender());
+		Assertions.assertFalse(persistedPerson.getEnabled());
+
+		assertEquals(person.getId(), persistedPerson.getId());
+
+		assertEquals("Nelson", persistedPerson.getFirstName());
+		assertEquals("Piquet Souto Maior", persistedPerson.getLastName());
+		assertEquals("Brasília - DF - Brasil", persistedPerson.getAddress());
+		assertEquals("Male", persistedPerson.getGender());
+	}
+
+	@Test
+	@Order(5)
 	public void testDelete() throws JsonMappingException, JsonProcessingException {
 
 		given().spec(specification)
@@ -191,7 +226,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 	}
 
 	@Test
-	@Order(5)
+	@Order(6)
 	public void testFindAll() throws JsonMappingException, JsonProcessingException {
 
 		var content = given().spec(specification)
@@ -224,7 +259,7 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
 
 	@Test
-	@Order(6)
+	@Order(7)
 	public void testFindAllWithoutToken() throws JsonMappingException, JsonProcessingException {
 
 		RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
@@ -247,5 +282,6 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 		person.setLastName("Piquet");
 		person.setAddress("Brasília - DF - Brasil");
 		person.setGender("Male");
+		person.setEnabled(true);
 	}
 }

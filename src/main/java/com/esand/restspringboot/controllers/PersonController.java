@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -87,7 +90,10 @@ public class PersonController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<PersonDto>> findAll() {
+    public ResponseEntity<List<PersonDto>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "limit", defaultValue = "12") Integer limit
+            ) {
         List<PersonDto> response = Mapper.parseListObject(personService.findAll(), PersonDto.class);
         response.stream().forEach(p -> p.add(linkTo(methodOn(PersonController.class).findById(p.getId())).withSelfRel()));
         return ResponseEntity.ok(response);
@@ -129,4 +135,24 @@ public class PersonController {
         PersonDto response = Mapper.parseObject(person, PersonDto.class).add(linkTo(methodOn(PersonController.class).update(id, dto)).withSelfRel());
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "Disable a specific Person by your ID", description = "Disable a specific Person by your ID",
+            tags = {"People"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = PersonDto.class))
+                    ),
+                    @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+            }
+    )
+    @CrossOrigin(origins = "http://localhost:8080")
+    @PatchMapping("/{id}")
+    public PersonDto update(@PathVariable Long id) {
+        return Mapper.parseObject(personService.alternEnabled(id), PersonDto.class);
+    }
+
 }
